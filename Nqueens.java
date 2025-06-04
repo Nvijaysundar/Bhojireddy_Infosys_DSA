@@ -1,0 +1,82 @@
+import java.util.ArrayList;
+import java.util.List;
+
+public class Nqueens {
+	public static void main(String[] args) {
+		//{ {"..Q.","Q..."} ,{}}
+		List<List<String>> res = solveNQueens(7);
+		for(List<String> solution:res)
+		{
+			for(String row : solution)
+			{
+				System.out.println(row);
+			}
+			System.out.println();
+		}
+	}
+	static List<List<String>> solveNQueens(int n)
+	{
+		List<List<String>> solution = new ArrayList<>();
+		char[][] board  = new char[n][n];
+		for(int i=0;i<n;i++)
+		{
+			for(int j=0;j<n;j++)
+			{
+				board[i][j] = '.';
+			}
+		}
+		helper(board,0,n,solution);
+		return solution;
+	}
+	static void helper(char [][] board,int row,int n,
+			List<List<String>> solution)
+	{
+		if(row == n)
+		{
+			solution.add(constructBoard(board));
+			return;
+		}
+		
+		for (int col = 0;col<n;col++)
+		{
+			if(isSafe(board,row,col,n))
+			{
+				board[row][col] = 'Q';
+				helper(board,row+1,n,solution);
+				board[row][col] = '.';
+			}
+		}
+		
+	}
+	static boolean isSafe(char[][] board,int row,int col,int n)
+	{
+		for(int i=0;i<row;i++)
+		{
+			if(board[i][col]=='Q')
+				return false;
+		}
+		
+		for(int i=row-1,j=col-1;i>=0 &&j>=0;i--,j--)
+		{
+			if(board[i][j]=='Q')
+				return false;
+		}
+		
+		for(int i=row-1,j=col+1;i>=0&&j<n;i--,j++)
+		{
+			if(board[i][j]=='Q')
+				return false;
+		}
+		return true;
+	}
+	
+	static List<String> constructBoard(char[][] board)
+	{
+		List<String> result = new ArrayList<>();
+		for(char[] row : board)
+		{
+			result.add(new String(row));
+		}
+		return result;
+	}	
+}
